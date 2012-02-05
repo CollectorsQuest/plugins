@@ -1,0 +1,29 @@
+all:
+  .settings:
+    i18n:                   true
+    default_culture:        bg_BG
+    default_timezone:       Europe/Sofia
+    charset:                utf-8
+
+    enabled_modules:        [iceI18nAdmin]
+    standard_helpers:       [Partial, I18N]
+
+    logging_enabled:        false
+    no_script_name:         true
+
+    # Form security secret (CSRF protection)
+    csrf_secret:            2b3CBwDbCm6fRfuuEAAt
+
+    # Output escaping settings
+    escaping_strategy:      true
+    escaping_method:        ESC_SPECIALCHARS
+
+    # Enable the database manager
+    use_database:           true
+
+test:
+  .settings:
+    error_reporting:        <?php echo ((E_ALL | E_STRICT) ^ E_NOTICE)."\n" ?>
+    cache:                  false
+    web_debug:              false
+    etag:                   false

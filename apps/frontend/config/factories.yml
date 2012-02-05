@@ -1,0 +1,51 @@
+
+test:
+  storage:
+    class: sfSessionTestStorage
+    param:
+      session_path: %SF_TEST_CACHE_DIR%/sessions
+
+  response:
+    class: IceWebTestResponse
+    param:
+      send_http_headers: false
+
+  request:
+    class: IceWebTestRequest
+
+  mailer:
+    param:
+      delivery_strategy: none
+
+  i18n:
+    class: sfI18N
+
+all:
+  routing:
+    class: IcePatternRouting
+    param:
+      generate_shortest_url:            true
+      extra_parameters_as_query_string: true
+
+  view_cache_manager:
+    class: sfViewCacheManager
+    param:
+      cache_key_use_vary_headers: true
+      cache_key_use_host_name:    true
+
+  i18n:
+    class: iceI18N
+    param:
+      source:               iceMySQL
+      database:             propel
+      debug:                false
+      learning_mode:        false
+      untranslated_prefix:  "[T]"
+      untranslated_suffix:  "[/T]"
+      cache:
+        class: sfFileCache
+        param:
+          automatic_cleaning_factor: 0
+          cache_dir:                 %SF_I18N_CACHE_DIR%
+          lifetime:                  86400
+          prefix:                    %SF_APP_DIR%

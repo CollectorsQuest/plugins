@@ -1,0 +1,35 @@
+sitemap:
+  url: /:sf_culture/sitemap
+  param: { module: general, action: sitemap }
+  requirements: { sf_method: [GET] }
+
+sitemap_by_category:
+  url: /:sf_culture/sitemap/:category
+  param: { module: general, action: sitemap }
+  requirements: { sf_method: [GET] }
+
+publisher_by_slug:
+  url:  /:sf_culture/publisher/:slug-:id
+  class: IcePropelRoute
+  options: { model: Publisher, type: object, method: getObjectForRoute, segment_separators: ["/", ".", "-"], suffix: .html }
+  param: { module: publisher, action: index }
+  requirements: { id: '\d+' }
+
+favorite_publisher:
+  url:   :slug.%APP_DOMAIN%/
+  class: IceHostAwareRoute
+  param: { module: general, action: default }
+
+# default rules
+homepage:
+  url:   /
+  param: { module: general, action: index }
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

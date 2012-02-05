@@ -1,0 +1,6 @@
+all:
+  cultures:
+    short: [bg, en, ru]
+    extended: [bg_BG, en_US, ru_RU]
+
+  www_domain: bookstore.test

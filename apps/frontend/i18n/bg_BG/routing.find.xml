@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!DOCTYPE xliff PUBLIC "-//XLIFF//DTD XLIFF//EN" "http://www.oasis-open.org/committees/xliff/documents/xliff.dtd"><xliff version="1.0">
+  <file datatype="plaintext" original="routing" date="2010-04-30T16:58:01Z" product-name="routing" xml:space="default">
+    <header></header>
+    <body>
+      <trans-unit id="1" translate="yes" reformat="yes" xml:space="default" approved="yes">
+        <source>/bg_BG/карта-на-сайта</source>
+        <target xml:lang="bg">/bg_BG/sitemap</target>
+      </trans-unit>
+      <trans-unit id="1" translate="yes" reformat="yes" xml:space="default" approved="yes">
+        <source>/bg_BG/карта-на-сайта/издател</source>
+        <target xml:lang="bg">/bg_BG/sitemap/publisher</target>
+      </trans-unit>
+      <trans-unit id="2" translate="yes" reformat="yes" xml:space="default" approved="yes">
+        <source>/bg_BG/издател</source>
+        <target xml:lang="bg">/bg_BG/publisher</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

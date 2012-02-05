@@ -1,0 +1,40 @@
+connection: propel
+noXsd: false
+defaultIdMethod: native
+package: lib.model
+encoding: utf8
+
+classes:
+  Bookstore:
+    columns:
+      id:  ~
+      name:     { type: varchar, size: 50 }
+      location: { type: varchar, size: 128 }
+      website:  { type: varchar, size: 255 }
+
+  Book:
+    columns:
+      id:  ~
+      author_id:  ~
+      publisher_id:  ~
+      title:  { type: varchar, size: 255 }
+      isbn:   { type: varchar, size: 24 }
+      price:  { type: float, require: false }
+      eblob:  { type: longvarchar, required: false, default: null }
+
+    propel_behaviors:
+      soft_delete: ~
+      timestampable: ~
+
+  Author:
+    columns:
+      id:  ~
+      first_name: { type: varchar, size: 128 }
+      last_name:  { type: varchar, size: 128 }
+      email:      { type: varchar, size: 128 }
+      age:        { type: integer, required: false }
+
+  Publisher:
+    columns:
+      id:  ~
+      name:  { type: varchar, size: 128, primaryString: true }
