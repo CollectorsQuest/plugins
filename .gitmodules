@@ -38,3 +38,6 @@
 	path = plugins/iceTaggablePlugin
 	url = git@github.com:CollectorsQuest/iceTaggablePlugin.git
 
+[submodule "plugins/iceGeoLocationPlugin"]
+	path = plugins/iceGeoLocationPlugin
+	url = git@github.com:CollectorsQuest/iceGeoLocationPlugin.git
