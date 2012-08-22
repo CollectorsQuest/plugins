@@ -25,6 +25,12 @@ abstract class BaseBookstore extends BaseObject  implements Persistent
   protected static $peer;
 
   /**
+   * The flag var to prevent infinit loop in deep copy
+   * @var       boolean
+   */
+  protected $startCopy = false;
+
+  /**
    * The value for the id field.
    * @var        int
    */
@@ -362,7 +368,7 @@ abstract class BaseBookstore extends BaseObject  implements Persistent
         $con->commit();
       }
     }
-    catch (PropelException $e)
+    catch (Exception $e)
     {
       $con->rollBack();
       throw $e;
@@ -444,7 +450,7 @@ abstract class BaseBookstore extends BaseObject  implements Persistent
       $con->commit();
       return $affectedRows;
     }
-    catch (PropelException $e)
+    catch (Exception $e)
     {
       $con->rollBack();
       throw $e;
@@ -469,39 +475,124 @@ abstract class BaseBookstore extends BaseObject  implements Persistent
     {
       $this->alreadyInSave = true;
 
-      if ($this->isNew() )
+      if ($this->isNew() || $this->isModified())
       {
-        $this->modifiedColumns[] = BookstorePeer::ID;
-      }
-
-      // If this object has been modified, then save it to the database.
-      if ($this->isModified())
-      {
+        // persist changes
         if ($this->isNew())
         {
-          $criteria = $this->buildCriteria();
-          if ($criteria->keyContainsValue(BookstorePeer::ID) )
-          {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.BookstorePeer::ID.')');
-          }
-
-          $pk = BasePeer::doInsert($criteria, $con);
-          $affectedRows = 1;
-          $this->setId($pk);  //[IMV] update autoincrement primary key
-          $this->setNew(false);
+          $this->doInsert($con);
         }
         else
         {
-          $affectedRows = BookstorePeer::doUpdate($this, $con);
+          $this->doUpdate($con);
         }
-
-        $this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+        $affectedRows += 1;
+        $this->resetModified();
       }
 
       $this->alreadyInSave = false;
 
     }
     return $affectedRows;
+  }
+
+  /**
+   * Insert the row in the database.
+   *
+   * @param      PropelPDO $con
+   *
+   * @throws     PropelException
+   * @see        doSave()
+   */
+  protected function doInsert(PropelPDO $con)
+  {
+    $modifiedColumns = array();
+    $index = 0;
+
+    $this->modifiedColumns[] = BookstorePeer::ID;
+    if (null !== $this->id)
+    {
+      throw new PropelException('Cannot insert a value for auto-increment primary key (' . BookstorePeer::ID . ')');
+    }
+
+     // check the columns in natural order for more readable SQL queries
+    if ($this->isColumnModified(BookstorePeer::ID))
+    {
+      $modifiedColumns[':p' . $index++]  = '`ID`';
+    }
+    if ($this->isColumnModified(BookstorePeer::NAME))
+    {
+      $modifiedColumns[':p' . $index++]  = '`NAME`';
+    }
+    if ($this->isColumnModified(BookstorePeer::LOCATION))
+    {
+      $modifiedColumns[':p' . $index++]  = '`LOCATION`';
+    }
+    if ($this->isColumnModified(BookstorePeer::WEBSITE))
+    {
+      $modifiedColumns[':p' . $index++]  = '`WEBSITE`';
+    }
+
+    $sql = sprintf(
+      'INSERT INTO `bookstore` (%s) VALUES (%s)',
+      implode(', ', $modifiedColumns),
+      implode(', ', array_keys($modifiedColumns))
+    );
+
+    try
+    {
+      $stmt = $con->prepare($sql);
+      foreach ($modifiedColumns as $identifier => $columnName)
+      {
+        switch ($columnName)
+        {
+          case '`ID`':
+            $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+            break;
+          case '`NAME`':
+            $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+            break;
+          case '`LOCATION`':
+            $stmt->bindValue($identifier, $this->location, PDO::PARAM_STR);
+            break;
+          case '`WEBSITE`':
+            $stmt->bindValue($identifier, $this->website, PDO::PARAM_STR);
+            break;
+        }
+      }
+      $stmt->execute();
+    }
+    catch (Exception $e)
+    {
+      Propel::log($e->getMessage(), Propel::LOG_ERR);
+      throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+    }
+
+    try
+    {
+      $pk = $con->lastInsertId();
+    }
+    catch (Exception $e)
+    {
+      throw new PropelException('Unable to get autoincrement id.', $e);
+    }
+    $this->setId($pk);
+
+    $this->setNew(false);
+  }
+
+  /**
+   * Update the row in the database.
+   *
+   * @param      PropelPDO $con
+   *
+   * @see        doSave()
+   */
+  protected function doUpdate(PropelPDO $con)
+  {
+    $selectCriteria = $this->buildPkeyCriteria();
+    $valuesCriteria = $this->buildCriteria();
+    BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
   }
 
   /**

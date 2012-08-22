@@ -2,7 +2,7 @@
 
 date_default_timezone_set('America/New_York');
 
-require_once '/www/libs/symfony-1.4.x/lib/autoload/sfCoreAutoload.class.php';
+require_once 'symfony/autoload/sfCoreAutoload.class.php';
 sfCoreAutoload::register();
 
 class ProjectConfiguration extends sfProjectConfiguration
@@ -44,6 +44,6 @@ class ProjectConfiguration extends sfProjectConfiguration
     $plugins = array_reverse($plugins);
 
     parent::enablePlugins($plugins);
-    $this->disablePlugins(array('sfPropelPlugin', 'sfPropel15Plugin', 'sfDoctrinePlugin'));
+    $this->disablePlugins(array('sfPropelPlugin', 'sfDoctrinePlugin'));
   }
 }
