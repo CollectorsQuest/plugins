@@ -11,6 +11,7 @@ nbproject
 /log/*
 /data/sql/*.schema.sql
 /data/sql/sqldb.map
+/web/uploads
 
 # project specific ignores
 /test/schemas/*.sql

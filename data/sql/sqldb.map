@@ -12,3 +12,4 @@ plugins.iceSpamControlPlugin.lib.model.schema.sql=propel
 plugins.iceTaggablePlugin.lib.model.schema.sql=propel
 plugins.sfGuardPlugin.lib.model.schema.sql=propel
 plugins.iceGeoLocationPlugin.lib.model.schema.sql=propel
+lib.model.plugins.iceMultimediaPlugin.schema.sql=propel

@@ -2,8 +2,11 @@
 
 date_default_timezone_set('America/New_York');
 
-require_once 'symfony/autoload/sfCoreAutoload.class.php';
-sfCoreAutoload::register();
+define('SF_LIB_DIR', '/usr/lib/php/symfony');
+require_once __DIR__.'/../plugins/iceLibsPlugin/lib/autoload/IceCoreAutoload.class.php';
+require_once __DIR__.'/../plugins/iceLibsPlugin/lib/autoload/IceClassLoader.class.php';
+
+IceClassLoader::initialize();
 
 class ProjectConfiguration extends sfProjectConfiguration
 {
@@ -17,7 +20,11 @@ class ProjectConfiguration extends sfProjectConfiguration
     iconv_set_encoding('output_encoding', 'UTF-8');
     iconv_set_encoding('internal_encoding', 'UTF-8');
 
-    $this->enablePlugins(array());
+    $this->enablePlugins('sfPropelORMPlugin');
+    $this->enablePlugins(array(
+      'iceMultimediaPlugin', 'iceBehaviorsPlugin', 'iceLibsPlugin',
+      'iceTaggablePlugin', 'iceGeoLocationPlugin'
+    ));
   }
 
   public function setupPlugins()
@@ -32,18 +39,5 @@ class ProjectConfiguration extends sfProjectConfiguration
         $this->pluginConfigurations[$plugin]->connectTests();
       }
     }
-  }
-
-  public function enablePlugins($plugins)
-  {
-    $plugins = array_keys($this->getAllPluginPaths());
-
-    sort($plugins, SORT_STRING);
-    $plugins = array_reverse($plugins);
-    $plugins[] = 'sfPropelORMPlugin';
-    $plugins = array_reverse($plugins);
-
-    parent::enablePlugins($plugins);
-    $this->disablePlugins(array('sfPropelPlugin', 'sfDoctrinePlugin'));
   }
 }
